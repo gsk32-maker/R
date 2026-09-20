@@ -29,7 +29,7 @@ local AtmCorner = Instance.new("UICorner")
 local GodButton = Instance.new("TextButton")
 local GodCorner = Instance.new("UICorner")
 
--- زر إعدادات السيارات / السرعة (إعدادات إضافية)
+-- زر إعدادات السرعة
 local SettingsButton = Instance.new("TextButton")
 local SettingsCorner = Instance.new("UICorner")
 
@@ -86,7 +86,7 @@ GodButton.TextSize = 13
 GodCorner.CornerRadius = UDim.new(0, 8)
 GodCorner.Parent = GodButton
 
--- تصميم زر إعدادات السرعة / السيارات
+-- تصميم زر إعدادات السرعة
 SettingsButton.Name = "SettingsButton"
 SettingsButton.Parent = MainFrame
 SettingsButton.BackgroundColor3 = Color3.fromRGB(50, 100, 200)
@@ -128,7 +128,7 @@ GodButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- تفعيل سرعة الحركة (بدل السيارات المؤقتة لحين ضبط إحداثياتها)
+-- تفعيل سرعة الحركة
 SettingsButton.MouseButton1Click:Connect(function()
     speedBoost = not speedBoost
     if speedBoost then
@@ -142,7 +142,6 @@ end)
 
 -- حلقة التشغيل والتنفيذ المستمر
 runService.RenderStepped:Connect(function()
-    -- حماية الموت
     if antiDeath then
         pcall(function()
             local char = player.Character
@@ -152,7 +151,6 @@ runService.RenderStepped:Connect(function()
         end)
     end
 
-    -- زيادة السرعة للتنقل السريع بين الـ ATMs والسيارات
     if speedBoost then
         pcall(function()
             local char = player.Character
@@ -164,7 +162,6 @@ runService.RenderStepped:Connect(function()
         end)
     end
 
-    -- فارم الـ ATM
     if atmFarming then
         pcall(function()
             for _, obj in pairs(workspace:GetDescendants()) do
