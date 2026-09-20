@@ -1,0 +1,177 @@
+--[==[
+    Map: BlockSpin
+    Script Created by: A_1g
+    Features: Auto ATM Farm, Anti-Death & Control Settings
+]==]
+
+local player = game.Players.LocalPlayer
+local runService = game:GetService("RunService")
+
+-- إشعار الترحيب بالحقوق
+pcall(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "BlockSpin | A_1g",
+        Text = "تم تفعيل السكربت بنجاح - حقوق: A_1g",
+        Duration = 5
+    })
+end)
+
+-- إنشاء الواجهة الرئيسية
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local TitleLabel = Instance.new("TextLabel")
+
+-- زر فارم الـ ATM
+local AtmButton = Instance.new("TextButton")
+local AtmCorner = Instance.new("UICorner")
+
+-- زر مضاد الموت
+local GodButton = Instance.new("TextButton")
+local GodCorner = Instance.new("UICorner")
+
+-- زر إعدادات السيارات / السرعة (إعدادات إضافية)
+local SettingsButton = Instance.new("TextButton")
+local SettingsCorner = Instance.new("UICorner")
+
+-- حماية الواجهة لتظهر داخل Delta
+if syn and syn.protect_gui then
+    syn.protect_gui(ScreenGui)
+    ScreenGui.Parent = game.CoreGui
+elseif gethui then
+    ScreenGui.Parent = gethui()
+else
+    ScreenGui.Parent = game.CoreGui
+end
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Position = UDim2.new(0.5, -110, 0.4, -105)
+MainFrame.Size = UDim2.new(0, 220, 0, 215)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Parent = MainFrame
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Size = UDim2.new(1, 0, 0, 35)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "BlockSpin | A_1g"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 15
+
+-- تصميم زر الفارم
+AtmButton.Name = "AtmButton"
+AtmButton.Parent = MainFrame
+AtmButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+AtmButton.Position = UDim2.new(0.1, 0, 0.2, 0)
+AtmButton.Size = UDim2.new(0, 176, 0, 40)
+AtmButton.Font = Enum.Font.GothamBold
+AtmButton.Text = "ATM Farm: OFF"
+AtmButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+AtmButton.TextSize = 13
+AtmCorner.CornerRadius = UDim.new(0, 8)
+AtmCorner.Parent = AtmButton
+
+-- تصميم زر مضاد الموت
+GodButton.Name = "GodButton"
+GodButton.Parent = MainFrame
+GodButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+GodButton.Position = UDim2.new(0.1, 0, 0.43, 0)
+GodButton.Size = UDim2.new(0, 176, 0, 40)
+GodButton.Font = Enum.Font.GothamBold
+GodButton.Text = "Anti-Death: OFF"
+GodButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+GodButton.TextSize = 13
+GodCorner.CornerRadius = UDim.new(0, 8)
+GodCorner.Parent = GodButton
+
+-- تصميم زر إعدادات السرعة / السيارات
+SettingsButton.Name = "SettingsButton"
+SettingsButton.Parent = MainFrame
+SettingsButton.BackgroundColor3 = Color3.fromRGB(50, 100, 200)
+SettingsButton.Position = UDim2.new(0.1, 0, 0.66, 0)
+SettingsButton.Size = UDim2.new(0, 176, 0, 40)
+SettingsButton.Font = Enum.Font.GothamBold
+SettingsButton.Text = "Speed Boost: OFF"
+SettingsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SettingsButton.TextSize = 13
+SettingsCorner.CornerRadius = UDim.new(0, 8)
+SettingsCorner.Parent = SettingsButton
+
+-- متغيرات التحكم
+local atmFarming = false
+local antiDeath = false
+local speedBoost = false
+
+-- تفعيل فارم الـ ATM
+AtmButton.MouseButton1Click:Connect(function()
+    atmFarming = not atmFarming
+    if atmFarming then
+        AtmButton.Text = "ATM Farm: ON"
+        AtmButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+    else
+        AtmButton.Text = "ATM Farm: OFF"
+        AtmButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    end
+end)
+
+-- تفعيل مضاد الموت
+GodButton.MouseButton1Click:Connect(function()
+    antiDeath = not antiDeath
+    if antiDeath then
+        GodButton.Text = "Anti-Death: ON"
+        GodButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+    else
+        GodButton.Text = "Anti-Death: OFF"
+        GodButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    end
+end)
+
+-- تفعيل سرعة الحركة (بدل السيارات المؤقتة لحين ضبط إحداثياتها)
+SettingsButton.MouseButton1Click:Connect(function()
+    speedBoost = not speedBoost
+    if speedBoost then
+        SettingsButton.Text = "Speed Boost: ON"
+        SettingsButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+    else
+        SettingsButton.Text = "Speed Boost: OFF"
+        SettingsButton.BackgroundColor3 = Color3.fromRGB(50, 100, 200)
+    end
+end)
+
+-- حلقة التشغيل والتنفيذ المستمر
+runService.RenderStepped:Connect(function()
+    -- حماية الموت
+    if antiDeath then
+        pcall(function()
+            local char = player.Character
+            if char and char:FindFirstChild("Humanoid") then
+                char.Humanoid.Health = char.Humanoid.MaxHealth
+            end
+        end)
+    end
+
+    -- زيادة السرعة للتنقل السريع بين الـ ATMs والسيارات
+    if speedBoost then
+        pcall(function()
+            local char = player.Character
+            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                if char.Humanoid.MoveDirection.Magnitude > 0 then
+                    char.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame + (char.Humanoid.MoveDirection * 0.8)
+                end
+            end
+        end)
+    end
+
+    -- فارم الـ ATM
+    if atmFarming then
+        pcall(function()
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if obj.Name:lower():find("atm") and obj:FindFirstChild("ProximityPrompt") then
+                    fireproximityprompt(obj.ProximityPrompt)
+                end
+            end
+        end)
+    end
+end)
